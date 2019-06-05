@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.apps.app02.dao.UserMapper">
+    <select id="query" resultType="com.briup.apps.app02.bean.User">
+        select * from sms_user
+        <where>
+            <if test="realname != null">
+                realname like concat('%',#{realname},'%')
+            </if>
+            <if test="telephone != null">
+                AND telephone like concat('%',#{telephone},'%')
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectAll" resultType="com.briup.apps.app02.bean.User">
+        select * from sms_user
+    </select>
+    <select id="selectByPrimaryKey" resultType="com.briup.apps.app02.bean.User">
+        select * from sms_user where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into sms_user
+        values (null ,#{realname} ,#{telephone},#{password} ,#{gender} ,#{type} ,#{status} )
+    </insert>
+
+    <update id="update">
+        update sms_user
+        <set>
+            <if test="realname != null">realname=#{realname},</if>
+            <if test="telephone != null">telephone=#{telephone},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="gender != null">gender=#{gender},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="status != null">status=#{status}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sms_user where id = #{id}
+    </delete>
+
+</mapper>

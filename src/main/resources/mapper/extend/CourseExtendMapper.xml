@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.apps.app02.dao.extend.CourseExtendMapper">
+    <select id="selectAll" resultMap="courseExtendResultMap">
+        select
+            c.id as c_id,
+            c.name,
+            c.description,
+            c.credit,
+            c.teacher_id,
+            t.id as t_id,
+            t.realname,
+            t.type,
+            t.status
+        from sms_course c left join sms_user t
+        on c.teacher_id = t.id
+    </select>
+    <resultMap id="courseExtendResultMap"
+               type="com.briup.apps.app02.bean.extend.CourseExtend">
+        <id column="c_id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="credit" property="credit"/>
+        <result column="teacher_id" property="teacher_id"/>
+        <association property="teacher" javaType="com.briup.apps.app02.bean.User">
+            <id column="t_id" property="id"/>
+            <result column="realname" property="realname"/>
+        </association>
+    </resultMap>
+
+    <!--
+    <select id="selectAll" resultMap="courseExtendResultMap">
+        select * from sms_course
+    </select>
+
+    <resultMap id="courseExtendResultMap"
+               type="com.briup.apps.app02.bean.extend.CourseExtend">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="credit" property="credit"/>
+        <result column="teacher_id" property="teacher_id"/>
+        <association
+                select="com.briup.apps.app02.dao.UserMapper.selectByPrimaryKey"
+                column="teacher_id"
+                property="teacher"/>
+    </resultMap>
+    -->
+</mapper>
