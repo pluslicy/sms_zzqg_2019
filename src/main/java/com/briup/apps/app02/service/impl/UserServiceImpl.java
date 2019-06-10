@@ -1,6 +1,7 @@
 package com.briup.apps.app02.service.impl;
 
 import com.briup.apps.app02.bean.User;
+import com.briup.apps.app02.bean.UserExample;
 import com.briup.apps.app02.dao.UserMapper;
 import com.briup.apps.app02.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,30 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> query(User user) {
-        return userMapper.query(user);
+        // 创建空模板
+        UserExample example = new UserExample();
+        // 在模板中添加条件
+        if(user.getRealname()!=null){
+            example
+            .createCriteria()
+            .andRealnameLike("%"+user.getRealname()+"%");
+        }
+        if(user.getTelephone()!=null){
+            example
+            .createCriteria()
+            .andTelephoneLike("%"+user.getTelephone()+"%");
+        }
+        if(user.getGender()!=null){
+            example.createCriteria().andGenderEqualTo(user.getGender());
+        }
+
+        return userMapper.selectByExample(example);
     }
 
     @Override
     public List<User> findAll() {
-        return userMapper.selectAll();
+        UserExample example = new UserExample();
+        return userMapper.selectByExample(example);
     }
 
     @Override
@@ -37,7 +56,7 @@ public class UserServiceImpl implements IUserService {
             user.setStatus("正常");
             userMapper.insert(user);
         } else {
-            userMapper.update(user);
+            userMapper.updateByPrimaryKey(user);
         }
     }
 
